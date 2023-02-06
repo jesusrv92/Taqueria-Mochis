@@ -13,9 +13,9 @@ p {
   width: 5rem;
   height: 5rem;
   font-size: 0.8rem;
-  padding: 10px 0;
+  padding: 1rem 0;
   text-align: center;
-  margin-right: 20px;
+  margin: 0.5rem;
   display: inline-block;
   cursor: pointer;
   border: rgb(127, 127, 127) solid 1px;

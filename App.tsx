@@ -5,7 +5,8 @@ import { OrderInput } from './OrderInput';
 export default function App() {
   return (
     <div>
-      <OrderInput/>
+      <span>TAQUERIA MOCHIS</span>
+      <OrderInput />
     </div>
   );
 }

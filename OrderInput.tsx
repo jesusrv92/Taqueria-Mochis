@@ -1,93 +1,92 @@
 import * as React from 'react';
-import { Path, useForm, UseFormRegister, SubmitHandler } from 'react-hook-form';
+import set from 'react-hook-form/dist/utils/set';
+import menuItems from './menuItems';
 
-interface IFormValues {
-  Quantity: number;
-  Item: number;
-}
-
-type InputProps = {
-  label: Path<IFormValues>;
-  register: UseFormRegister<IFormValues>;
-  required: boolean;
-};
-
-type OrderItem = {
+type MenuItem = {
   name: string;
   cost: number;
 };
 
-const orderItems = [
-  { name: 'Taco de Birria', cost: 5 },
-  { name: 'Media de Birria', cost: 10 },
-  { name: 'Orden de Birria', cost: 15 },
-  { name: 'Taco de Cabeza', cost: 5 },
-  { name: 'Media de Cabeza', cost: 10 },
-  { name: 'Orden de Cabeza', cost: 15 },
-];
+type OrderItem = {
+  details: MenuItem;
+  quantity: number;
+};
 
-// The following component is an example of your existing Input Component
-const Input = ({ label, register, required }: InputProps) => (
-  <React.Fragment>
-    <label>{label}</label>
-    <input
-      type="number"
-      defaultValue={1}
-      min={1}
-      max={99}
-      {...register(label, { required })}
-    />
-  </React.Fragment>
+const Menu = ({ items = [], handleNewOrder }) => (
+  <div className="item_selector">
+    {items.map((item) => (
+      <React.Fragment>
+        <button onClick={() => handleNewOrder(item)}>
+          {item.name} ${item.cost}
+        </button>
+      </React.Fragment>
+    ))}
+  </div>
 );
 
-// you can use React.forwardRef to pass the ref too
-const Select = React.forwardRef<
-  HTMLSelectElement,
-  { label: string; items?: OrderItem[] } & ReturnType<
-    UseFormRegister<IFormValues>
-  >
->(({ onChange, onBlur, name, label, items = [] }, ref) => (
-  <React.Fragment>
-    <label>{label}</label>
-    <select name={name} ref={ref} onChange={onChange} onBlur={onBlur}>
-      {items.map((item, index) => (
-        <option value={index}>{item.name}</option>
-      ))}
-    </select>
-  </React.Fragment>
-));
+let tempOrders: Record<number, number | undefined> = {};
 
 export const OrderInput = () => {
-  const { register, handleSubmit } = useForm<IFormValues>();
-  const [order, setOrder] = React.useState([]);
+  const [order, setOrder] = React.useState<OrderItem[]>([]);
 
-  const onSubmit: SubmitHandler<IFormValues> = (data) => {
-    console.log(data);
-    console.log(orderItems[data.Item]);
-    setOrder([
-      ...order,
-      { details: orderItems[data.Item], quantity: data.Quantity },
-    ]);
-  };
-  
-  const onSubmitClear: SubmitHandler<IFormValues> = (data) => {
-    setOrder([]);
+  const handleNewOrder = (item: MenuItem) => {
+    console.log('item', item);
+    console.log('temp', tempOrders);
+    if (tempOrders[item.name] !== undefined) {
+      order[tempOrders[item.name]].quantity++;
+      return setOrder([...order]);
+    }
+    tempOrders[item.name] = order.length;
+    return setOrder([...order, { details: item, quantity: 1 }]);
   };
 
   return (
     <React.Fragment>
+      <Menu items={menuItems} handleNewOrder={handleNewOrder} />
+      <button onClick={() => setOrder([])}>Reset</button>
+      <p>
+        Total $
+        {order.reduce(
+          (acc, orderItem) => acc + orderItem.details.cost * orderItem.quantity,
+          0
+        )}
+      </p>
       <ul>
-        {order.map(orderItem => <li>{orderItem.details.name} ${orderItem.details.cost} * {orderItem.quantity} = {orderItem.details.cost * orderItem.quantity}</li>)}
+        {order.map((orderItem, index) => (
+          <li>
+            {orderItem.details.name} ${orderItem.details.cost} *{' '}
+            {orderItem.quantity} = {orderItem.details.cost * orderItem.quantity}
+            <button
+              onClick={() => {
+                if (orderItem.quantity === 1) return;
+                orderItem.quantity--;
+                setOrder([...order]);
+              }}
+            >
+              -
+            </button>
+            <button
+              onClick={() => {
+                if (orderItem.quantity === 99) return;
+                orderItem.quantity++;
+                setOrder([...order]);
+              }}
+            >
+              +
+            </button>
+            <button
+              onClick={() => {
+                tempOrders[orderItem.details.name] = undefined;
+                setOrder(
+                  order.filter((_, filterIndex) => index !== filterIndex)
+                );
+              }}
+            >
+              x
+            </button>
+          </li>
+        ))}
       </ul>
-      <span>Total ${order.reduce((acc,orderItem) => acc + orderItem.details.cost * orderItem.quantity,0)}</span>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Input label="Quantity" register={register} required />
-        <Select label="Item" {...register('Item')} items={orderItems} />
-        <input type="submit" />
-      </form>
-      <form onSubmit={handleSubmit(onSubmitClear)}>
-        <input type="submit" value="clear"/>
-      </form>
     </React.Fragment>
   );
 };

@@ -1,13 +1,14 @@
 export default [
+  { name: 'Bebida', cost: 30 },
   { name: 'Taco', cost: 35 },
   { name: 'Media', cost: 75 },
   { name: 'Orden', cost: 100 },
   { name: 'Litro', cost: 150 },
   { name: 'Taco de lengua', cost: 100 },
+  { name: 'Taco Taimir', cost: 45 },
   { name: 'Quesabirrias de maiz', cost: 45 },
   { name: 'Quesabirrias de harina', cost: 50 },
   { name: 'Pellizcada', cost: 65 },
-  { name: 'Taco Taimir', cost: 45 },
   { name: 'Asiento', cost: 15 },
   { name: 'Quesadilla', cost: 30 },
   { name: 'Tacos dorados', cost: 100 },
@@ -19,5 +20,4 @@ export default [
   { name: 'Cocido', cost: 100 },
   { name: 'Menudo Orden', cost: 100 },
   { name: 'Menudo Media', cost: 80 },
-  { name: 'Bebida', cost: 30 },
 ];

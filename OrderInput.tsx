@@ -41,52 +41,56 @@ export const OrderInput = () => {
   };
 
   return (
-    <React.Fragment>
+    <div className="summary">
       <Menu items={menuItems} handleNewOrder={handleNewOrder} />
-      <button onClick={() => setOrder([])}>Reset</button>
-      <p>
-        Total $
-        {order.reduce(
-          (acc, orderItem) => acc + orderItem.details.cost * orderItem.quantity,
-          0
-        )}
-      </p>
-      <ul>
-        {order.map((orderItem, index) => (
-          <li>
-            {orderItem.details.name} ${orderItem.details.cost} *{' '}
-            {orderItem.quantity} = {orderItem.details.cost * orderItem.quantity}
-            <button
-              onClick={() => {
-                if (orderItem.quantity === 1) return;
-                orderItem.quantity--;
-                setOrder([...order]);
-              }}
-            >
-              -
-            </button>
-            <button
-              onClick={() => {
-                if (orderItem.quantity === 99) return;
-                orderItem.quantity++;
-                setOrder([...order]);
-              }}
-            >
-              +
-            </button>
-            <button
-              onClick={() => {
-                tempOrders[orderItem.details.name] = undefined;
-                setOrder(
-                  order.filter((_, filterIndex) => index !== filterIndex)
-                );
-              }}
-            >
-              x
-            </button>
-          </li>
-        ))}
-      </ul>
-    </React.Fragment>
+      <div className="total">
+        <button onClick={() => setOrder([])}>Reset</button>
+        <p>
+          Total $
+          {order.reduce(
+            (acc, orderItem) =>
+              acc + orderItem.details.cost * orderItem.quantity,
+            0
+          )}
+        </p>
+        <ul>
+          {order.map((orderItem, index) => (
+            <li>
+              {orderItem.details.name} ${orderItem.details.cost} *{' '}
+              {orderItem.quantity} ={' '}
+              {orderItem.details.cost * orderItem.quantity}
+              <button
+                onClick={() => {
+                  if (orderItem.quantity === 1) return;
+                  orderItem.quantity--;
+                  setOrder([...order]);
+                }}
+              >
+                -
+              </button>
+              <button
+                onClick={() => {
+                  if (orderItem.quantity === 99) return;
+                  orderItem.quantity++;
+                  setOrder([...order]);
+                }}
+              >
+                +
+              </button>
+              <button
+                onClick={() => {
+                  tempOrders[orderItem.details.name] = undefined;
+                  setOrder(
+                    order.filter((_, filterIndex) => index !== filterIndex)
+                  );
+                }}
+              >
+                x
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 };

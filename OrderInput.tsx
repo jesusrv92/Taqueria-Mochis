@@ -17,7 +17,7 @@ const Menu = ({ items = [], handleNewOrder }) => (
     {items.map((item) => (
       <React.Fragment>
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-1/3"
+          className="bg-stone-500 hover:bg-stone-700 text-xs text-white font-bold py-2 px-2 rounded w-1/3 m-1"
           onClick={() => handleNewOrder(item)}
         >
           {item.name} ${item.cost}
@@ -44,9 +44,9 @@ export const OrderInput = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex mx-6">
       <Menu items={menuItems} handleNewOrder={handleNewOrder} />
-      <div className="w-1/3 sticky top-0">
+      <div className="w-1/3 sticky top-0 mr-1">
         <button
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => setOrder([])}
@@ -64,19 +64,19 @@ export const OrderInput = () => {
             )}
           </span>
         </div>
-        <ul>
+        <ul className="mx-1">
           {order.map((orderItem, index) => (
-            <li className="p-4 mb-4 text-md text-white rounded-lg bg-blue-400">
+            <li className="p-4 mb-4 text-sm text-white rounded-lg bg-stone-400">
               <p>{orderItem.details.name}</p>
-              <div className="flex justify-between">
+              <div>
                 <div>
                   ${orderItem.details.cost}{' '}
                   <i className="fa-solid fa-xmark"></i> {orderItem.quantity} ={' '}
                   {orderItem.details.cost * orderItem.quantity}
                 </div>
-                <div>
+                <div className="flex justify-between">
                   <button
-                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded"
+                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-.5 px-1 rounded"
                     onClick={() => {
                       if (orderItem.quantity === 1) return;
                       orderItem.quantity--;
@@ -86,7 +86,7 @@ export const OrderInput = () => {
                     <i className="fa-solid fa-minus"></i>
                   </button>
                   <button
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-.5 px-1 rounded"
                     onClick={() => {
                       if (orderItem.quantity === 99) return;
                       orderItem.quantity++;
@@ -96,7 +96,7 @@ export const OrderInput = () => {
                     <i className="fa-solid fa-plus"></i>
                   </button>
                   <button
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-.5 px-1 rounded"
                     onClick={() => {
                       tempOrders[orderItem.details.name] = undefined;
                       setOrder(
